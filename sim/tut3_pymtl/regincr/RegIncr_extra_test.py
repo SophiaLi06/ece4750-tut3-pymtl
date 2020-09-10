@@ -40,3 +40,23 @@ def test_large( dump_vcd ):
 # for random testing.
 # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+import random
+
+def test_random( dump_vcd ):
+  test_vector_table = [( 'in_', 'out*' )]
+  last_result = '?'
+  for i in xrange(20):
+    rand_value = Bits( 8, random.randint(0, 0xff) )
+    test_vector_table.append( [ rand_value, last_result ] )
+    last_result = Bits( 8, rand_value + 1 )
+
+  run_test_vector_sim( RegIncr(), test_vector_table, dump_vcd )
+
+def test_overflow( dump_vcd ):
+  run_test_vector_sim( RegIncr(), [
+    ('in_   out*'),
+    [ 0x00, '?'  ],
+    [ 0xfe, 0x01 ],
+    [ 0xff, 0xff ],
+    [ 0x00, 0x00 ],
+  ], dump_vcd )

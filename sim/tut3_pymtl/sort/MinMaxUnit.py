@@ -23,3 +23,18 @@ class MinMaxUnit( Model ):
     # unit test from scratch named MinMaxUnit_test.py.
     # ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+    @s.combinational
+    def block():
+      if s.reset:
+        s.out_min.value = 0
+        s.out_max.value = 0
+      else:
+        if s.in0 < s.in1:
+          s.out_min.value = s.in0
+          s.out_max.value = s.in1
+        else:
+          s.out_min.value = s.in1
+          s.out_max.value = s.in0
+
+  def line_trace( s ):
+    return "{} {} {} {}".format( s.in0, s.in1, s.out_min, s.out_max )
